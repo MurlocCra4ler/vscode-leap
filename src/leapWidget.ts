@@ -1,4 +1,4 @@
-import { window, QuickPick, QuickPickItem, QuickInputButton, ThemeIcon, Range, ExtensionContext, ThemeColor } from "vscode";
+import { window, QuickPick, QuickPickItem, QuickInputButton, ThemeIcon, Range, ExtensionContext } from "vscode";
 import { find, hightlight } from "./find";
 import { Selection } from "vscode";
 
@@ -10,7 +10,6 @@ export class LeapWidget {
     private matchCase: boolean = false;
     private searchString = '';
     private searchResult: Range[] = [];
-
 
     private readonly quickPick: QuickPick<QuickPickItem> = window.createQuickPick();
     private quickInputButtons: Map<QuickInputButton, () => void> = new Map();

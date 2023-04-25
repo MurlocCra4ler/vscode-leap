@@ -1,4 +1,4 @@
-import { Position, TextLine, TextEditor, ThemeColor, window, DecorationOptions, Range, Uri, workspace, TextEditorDecorationType } from "vscode";
+import { Position, TextLine, TextEditor, window, Range, TextEditorDecorationType } from "vscode";
 
 let decorationTypes: TextEditorDecorationType[] = [];
 
@@ -13,10 +13,11 @@ export function find(searchString: string, matchCase: boolean, editor: TextEdito
 
     const anchor = searchString.slice(0, 2);
     const anchorLength = Math.min(searchString.length, 2);
-    for (let line of visibleLines) {
-        for (let character = 0; character < line.text.length; character++) {
-            const comperator = matchCase ? line.text.slice(character, character + anchorLength)
-                : line.text.slice(character, character + anchorLength).toLocaleLowerCase();
+    for (const line of visibleLines) {
+        const text = line.text + '  ';
+        for (let character = 0; character < text.length; character++) {
+            const comperator = matchCase ? text.slice(character, character + anchorLength)
+                : text.slice(character, character + anchorLength).toLocaleLowerCase();
             if (comperator === anchor) {
                 potentialMatches.push(new Range(
                     new Position(line.lineNumber, character),
@@ -75,7 +76,7 @@ function getVisibleLines(editor: TextEditor): TextLine[] {
     const ranges = editor.visibleRanges;
 
     for (let range of ranges) {
-        for (let lineNumber = range.start.line; lineNumber < range.end.line; lineNumber++) {
+        for (let lineNumber = range.start.line; lineNumber <= range.end.line; lineNumber++) {
             textLines.push(editor.document.lineAt(lineNumber));
         }
     }
