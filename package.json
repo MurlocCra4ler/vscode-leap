@@ -4,6 +4,7 @@
   "description": "General-purpose motion plugin inspired by leap.nvim",
   "icon": "media/icon.png",
   "version": "0.0.1",
+  "publisher": "MurlocCra4ler",
   "engines": {
     "vscode": "^1.77.0"
   },
