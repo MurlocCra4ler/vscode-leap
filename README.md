@@ -20,6 +20,10 @@ None, but feel free to report any bugs you may find :)
 
 ## Release Notes
 
+### 0.0.2
+
+The end of a line now acts as if it had trailing whitspaces. Try jumping to the end of it by pressing `space` twice.
+
 ### 0.0.1
 
 Initial release 🎉
