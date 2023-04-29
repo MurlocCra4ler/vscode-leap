@@ -12,7 +12,18 @@ The default key assignment to open the Leap widget is `Ctrl + Alt + F` and with 
 
 ## Extension Settings
 
-The ability to select a custom keymap is planned for future releases.
+Define new keybinds using the `"leap.find"` and `"leap.match-case"` commands. 
+
+Example using the [Vim extension](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim), mimicking [leap.nvim](https://github.com/ggandor/leap.nvim):
+
+```json
+"vim.normalModeKeyBindingsNonRecursive": [
+    {
+        "before": ["s"],
+        "commands": ["leap.find"]
+    }
+]
+```
 
 ## Known Issues
 
