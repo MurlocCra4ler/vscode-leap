@@ -41,6 +41,18 @@
         "command": "leap.match-case",
         "key": "alt+c"
       }
+    ],
+    "configuration":[
+      {
+        "title": "Leap",
+        "properties": {
+          "leap.whiteSpacesOnlyMatchNewLine": {
+            "type": "boolean",
+            "default": false,
+            "description": "Determines if <space><space> should only match the new Line symbol like in leap.nvim"
+          }
+        }
+      }
     ]
   },
   "scripts": {
