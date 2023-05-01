@@ -12,7 +12,16 @@ The default key assignment to open the Leap widget is `Ctrl + Alt + F` and with 
 
 ## Extension Settings
 
-Define new keybinds using the `"leap.find"` and `"leap.match-case"` commands. 
+### Keybindings
+
+Define new keybinds using the `"leap.find"` and `"leap.match-case"` commands.
+
+### Settings
+
+When searching for `<space><space>` leap will generate a label for every chain of whitespaces. To emulate the default behaviour of leap.nvim, which only shows labels
+at the end of every line, enable `"leap.whiteSpacesOnlyMatchNewLine"`.
+
+### Emulating Vim
 
 Example using the [Vim extension](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim), mimicking [leap.nvim](https://github.com/ggandor/leap.nvim):
 
@@ -30,6 +39,10 @@ Example using the [Vim extension](https://marketplace.visualstudio.com/items?ite
 None, but feel free to report any bugs you may find :)
 
 ## Release Notes
+
+### 0.0.3
+
+The behaviour when searching for whitespaces has been improved.
 
 ### 0.0.2
 

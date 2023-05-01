@@ -7,16 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2023-05-01
+
+### Changed
+
+- Reduced the number of results when searching for whitespaces.
+
+### Added
+
+- New extension setting for whitespace search behaviour.
+
+### Fixed
+
+- Perfomance increase for text decorations.
+
 ## [0.0.2] - 2023-04-25
 
 ### Added
 
-- added trailing whitespaces to the end of a line 
+- Added trailing whitespaces to the end of a line.
 
 ### Fixed
 
-- it is now possible to jump to all visible lines
+- It is now possible to jump to all visible lines.
 
 ## [0.0.1] - 2023-04-24
 
-- Initial release
+- Initial release!
