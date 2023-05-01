@@ -1,8 +1,9 @@
 import { Position, TextLine, TextEditor, window, Range, TextEditorDecorationType } from "vscode";
+import { ExtensionSettings } from "./extension";
 
-let decorationTypes: TextEditorDecorationType[] = [];
+let usedDecorationTypes: TextEditorDecorationType[] = [];
 
-export function find(searchString: string, matchCase: boolean, editor: TextEditor): Range[] {
+export function find(searchString: string, matchCase: boolean, editor: TextEditor, settings: ExtensionSettings): Range[] {
     const potentialMatches: Range[] = [];
     if (searchString.length === 0) {
         return potentialMatches;
@@ -15,10 +16,20 @@ export function find(searchString: string, matchCase: boolean, editor: TextEdito
     const anchorLength = Math.min(searchString.length, 2);
     for (const line of visibleLines) {
         const text = line.text + '  ';
+        console.log(text);
         for (let character = 0; character < text.length; character++) {
             const comperator = matchCase ? text.slice(character, character + anchorLength)
                 : text.slice(character, character + anchorLength).toLocaleLowerCase();
-            if (comperator === anchor) {
+
+            /* special handling for double whitespace */
+            if (comperator === anchor && anchor === '  ') {
+                if (((character === 0 || text.slice(character - 1, character) !== ' ') && !settings.whiteSpacesOnlyMatchNewLine) || character === text.length - 2) {
+                    potentialMatches.push(new Range(
+                        new Position(line.lineNumber, character),
+                        new Position(line.lineNumber, character)
+                    ));
+                }
+            } else if (comperator === anchor) {
                 potentialMatches.push(new Range(
                     new Position(line.lineNumber, character),
                     new Position(line.lineNumber, character + searchString.length)
@@ -34,7 +45,7 @@ export function find(searchString: string, matchCase: boolean, editor: TextEdito
     const searchStringTail = searchString.slice(2).toLocaleLowerCase();
     const searchResult: Range[] = [];
     for (let i = 0; i < potentialMatches.length; i++) {
-        if (createTruffles(i, searchStringTail.length) === searchStringTail) {
+        if (createLabels(i, searchStringTail.length) === searchStringTail) {
             searchResult.push(potentialMatches[i]);
         }
     }
@@ -42,22 +53,20 @@ export function find(searchString: string, matchCase: boolean, editor: TextEdito
     return searchResult;
 }
 
-export function hightlight(searchResult: Range[], editor: TextEditor): void {
-    for (let i = 0; i < decorationTypes.length; i++) {
-        editor.setDecorations(decorationTypes[i], []);
+export function hightlight(searchResult: Range[], editor: TextEditor, showLabels: boolean): void {
+    for (let i = 0; i < usedDecorationTypes.length; i++) {
+        usedDecorationTypes[i].dispose();
     }
 
-    decorationTypes = [];
-
+    usedDecorationTypes = [];
     for (let i = 0; i < searchResult.length; i++) {
-        const showTruffles = (searchResult[i].end.character - searchResult[i].start.character) >= 2;
-        const decorationType = createDecorationType(createTruffles(i, 1), showTruffles);
+        const decorationType = createDecorationType(createLabels(i, 1), showLabels);
         editor.setDecorations(decorationType, [{ range: searchResult[i] }]);
-        decorationTypes.push(decorationType);
+        usedDecorationTypes.push(decorationType);
     }
 }
 
-function createTruffles(value: number, length: number): string {
+function createLabels(value: number, length: number): string {
     let truffle = "";
     for (let i = 0; i < length; i++) {
         truffle += numberToCharacter(value % 26);
@@ -84,12 +93,12 @@ function getVisibleLines(editor: TextEditor): TextLine[] {
     return textLines;
 }
 
-function createDecorationType(truffle: string, showTruffles: boolean): TextEditorDecorationType {
+function createDecorationType(label: string, showLabels: boolean): TextEditorDecorationType { 
     return window.createTextEditorDecorationType({
         backgroundColor: 'var(--vscode-editor-findMatchHighlightBackground)',
         light: {
-            after: showTruffles ? {
-                contentText: truffle,
+            after: showLabels ? {
+                contentText: label,
                 color: 'var(--vscode-editor-background)',
                 backgroundColor: 'var(--vscode-editor-foreground)',
                 fontWeight: 'bold',
@@ -97,8 +106,8 @@ function createDecorationType(truffle: string, showTruffles: boolean): TextEdito
             } : undefined
         },
         dark: {
-            after: showTruffles ? {
-                contentText: truffle,
+            after: showLabels ? {
+                contentText: label,
                 color: 'var(--vscode-editor-background)',
                 backgroundColor: 'var(--vscode-editor-foreground)',
                 fontWeight: 'bold',

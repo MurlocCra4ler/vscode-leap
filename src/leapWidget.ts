@@ -1,6 +1,6 @@
-import { window, QuickPick, QuickPickItem, QuickInputButton, ThemeIcon, Range, ExtensionContext } from "vscode";
+import { window, QuickPick, QuickPickItem, QuickInputButton, ThemeIcon, Range, ExtensionContext, Selection } from "vscode";
+import { ExtensionSettings } from "./extension";
 import { find, hightlight } from "./find";
-import { Selection } from "vscode";
 
 const MATCH_CASE_KEY = 'match-case';
 
@@ -14,7 +14,7 @@ export class LeapWidget {
     private readonly quickPick: QuickPick<QuickPickItem> = window.createQuickPick();
     private quickInputButtons: Map<QuickInputButton, () => void> = new Map();
 
-    constructor(private readonly context: ExtensionContext) {
+    constructor(private readonly context: ExtensionContext, private readonly settings: ExtensionSettings) {
         this.quickPick.title = 'Leap Finder';
         this.quickPick.placeholder = 'Find';
 
@@ -73,8 +73,9 @@ export class LeapWidget {
             return;
         }
 
-        this.searchResult = find(this.searchString, this.matchCase, editor);
-        hightlight(this.searchResult, editor);
+        this.searchResult = find(this.searchString, this.matchCase, editor, this.settings);
+        const showLabels = this.searchString.length >= 2;
+        hightlight(this.searchResult, editor, showLabels);
 
         if (this.searchResult.length === 1) {
             editor.selections = [new Selection(this.searchResult[0].start, this.searchResult[0].start)];
@@ -90,7 +91,7 @@ export class LeapWidget {
 
         const editor = window.activeTextEditor;
         if (editor) {
-            hightlight([], editor);
+            hightlight([], editor, false);
         }
     }
 
