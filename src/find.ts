@@ -158,7 +158,13 @@ export function hightlight(
   usedDecorationTypes = [];
   for (let i = 0; i < searchResult.length; i++) {
     const decorationType = createDecorationType(createLabels(i, 1), showLabels);
-    editor.setDecorations(decorationType, [{ range: searchResult[i] }]);
+
+    const labelRange = new Range(
+      searchResult[i].end, // start from the end of the match
+      searchResult[i].end // end at the end of the match (i.e., no characters highlighted)
+    );
+
+    editor.setDecorations(decorationType, [{ range: labelRange }]);
     usedDecorationTypes.push(decorationType);
   }
 }
