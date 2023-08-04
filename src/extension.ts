@@ -50,7 +50,7 @@ export function activate(context: ExtensionContext) {
         ),
       };
       const widgetInstance = getWidgetInstance(context, settings);
-      widgetInstance.show(SearchDirection.FORWARD);
+      widgetInstance.show(SearchDirection.ENTIRE_VIEW);
     }),
 
     commands.registerCommand("leap.match-case", async () => {

@@ -75,6 +75,24 @@ export function findBackward(
   );
 }
 
+export function findEntireView(
+  searchString: string,
+  matchCase: boolean,
+  editor: TextEditor,
+  settings: ExtensionSettings,
+  startLine: number,
+  endLine: number
+): Range[] {
+  return findFromRange(
+    searchString,
+    matchCase,
+    editor,
+    settings,
+    startLine,
+    endLine
+  );
+}
+
 export function findFromRange(
   searchString: string,
   matchCase: boolean,

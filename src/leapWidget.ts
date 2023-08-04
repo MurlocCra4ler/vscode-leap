@@ -9,13 +9,20 @@ import {
   Selection,
 } from "vscode";
 import { ExtensionSettings } from "./extension";
-import { hightlight, findForward, findBackward, getVisibleLines } from "./find";
+import {
+  hightlight,
+  findForward,
+  findBackward,
+  getVisibleLines,
+  findEntireView,
+} from "./find";
 
 const MATCH_CASE_KEY = "match-case";
-// Add an enumeration to define search direction
+
 export enum SearchDirection {
   FORWARD,
   BACKWARD,
+  ENTIRE_VIEW,
 }
 
 export class LeapWidget {
@@ -60,6 +67,9 @@ export class LeapWidget {
         break;
       case SearchDirection.BACKWARD:
         this.findBackward();
+        break;
+      case SearchDirection.ENTIRE_VIEW:
+        this.findEntireView();
         break;
     }
   }
@@ -170,8 +180,10 @@ export class LeapWidget {
 
     if (this.currentSearchDirection === SearchDirection.FORWARD) {
       this.findForward();
-    } else {
+    } else if (this.currentSearchDirection === SearchDirection.BACKWARD) {
       this.findBackward();
+    } else {
+      this.findEntireView();
     }
   }
 
@@ -209,6 +221,27 @@ export class LeapWidget {
     const endLine = editor.visibleRanges[0].start.line;
 
     this.searchResult = findBackward(
+      this.searchString,
+      this.matchCase,
+      editor,
+      this.settings,
+      startLine,
+      endLine
+    );
+    this.handleSearchResults();
+  }
+
+  public findEntireView(): void {
+    this.currentSearchDirection = SearchDirection.ENTIRE;
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const startLine = editor.visibleRanges[0].start.line;
+    const endLine = editor.visibleRanges[0].end.line;
+
+    this.searchResult = findEntireView(
       this.searchString,
       this.matchCase,
       editor,
