@@ -47,13 +47,18 @@ export function findForward(
   startLine: number,
   endLine: number
 ): Range[] {
+  const startCharacter = editor.selection.active.character;
+  const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
+
   return findFromRange(
     searchString,
     matchCase,
     editor,
     settings,
     startLine,
-    endLine
+    startCharacter,
+    endLine,
+    endCharacter
   );
 }
 
@@ -65,13 +70,18 @@ export function findBackward(
   startLine: number,
   endLine: number
 ): Range[] {
+  const startCharacter = 0; // Start of the line
+  const endCharacter = editor.selection.active.character;
+
   return findFromRange(
     searchString,
     matchCase,
     editor,
     settings,
     endLine,
-    startLine
+    startCharacter,
+    startLine,
+    endCharacter
   );
 }
 
@@ -83,13 +93,18 @@ export function findEntireView(
   startLine: number,
   endLine: number
 ): Range[] {
+  const startCharacter = 0; // Start of the line
+  const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
+
   return findFromRange(
     searchString,
     matchCase,
     editor,
     settings,
     startLine,
-    endLine
+    startCharacter,
+    endLine,
+    endCharacter
   );
 }
 
@@ -99,9 +114,12 @@ export function findFromRange(
   editor: TextEditor,
   settings: ExtensionSettings,
   startLine: number,
-  endLine: number
+  startCharacter: number,
+  endLine: number,
+  endCharacter: number
 ): Range[] {
   const potentialMatches: Range[] = [];
+
   if (searchString.length === 0) {
     return potentialMatches;
   }
@@ -119,7 +137,18 @@ export function findFromRange(
   for (const line of lines) {
     const text = line.text + "  ";
     console.log(text);
-    for (let character = 0; character < text.length; character++) {
+
+    let startChar = 0; // default starting character
+    let endChar = text.length; // default ending character
+
+    if (line.lineNumber === startLine) {
+      startChar = startCharacter;
+    }
+    if (line.lineNumber === endLine) {
+      endChar = endCharacter;
+    }
+
+    for (let character = startChar; character < endChar; character++) {
       const comparator = matchCase
         ? text.slice(character, character + anchorLength)
         : text.slice(character, character + anchorLength).toLocaleLowerCase();

@@ -126,20 +126,21 @@ export class LeapWidget {
     }
 
     // Check if the cursor is in the first or second half of the visible portion of the editor
-    const cursorPosition = editor.selection.active.line;
+    const cursorPositionLine = editor.selection.active.line;
+    const cursorPositionCharacter = editor.selection.active.character;
     const visibleLines = getVisibleLines(editor);
     const middleVisibleLine =
       visibleLines[Math.floor(visibleLines.length / 2)].lineNumber;
 
     // Decide which find method to use based on the cursor's position
-    if (cursorPosition <= middleVisibleLine) {
+    if (cursorPositionLine <= middleVisibleLine) {
       this.searchResult = findBackward(
         this.searchString,
         this.matchCase,
         editor,
         this.settings,
         visibleLines[0].lineNumber, // start of visible range
-        cursorPosition // current cursor position
+        cursorPositionLine // current cursor line position
       );
     } else {
       this.searchResult = findForward(
@@ -147,7 +148,7 @@ export class LeapWidget {
         this.matchCase,
         editor,
         this.settings,
-        cursorPosition, // current cursor position
+        cursorPositionLine, // current cursor line position
         visibleLines[visibleLines.length - 1].lineNumber // end of visible range
       );
     }
@@ -198,7 +199,9 @@ export class LeapWidget {
       return;
     }
     const startLine = editor.selection.active.line;
+    const startCharacter = editor.selection.active.character;
     const endLine = editor.visibleRanges[0].end.line;
+    const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
 
     this.searchResult = findForward(
       this.searchString,
@@ -219,6 +222,8 @@ export class LeapWidget {
     }
     const startLine = editor.selection.start.line;
     const endLine = editor.visibleRanges[0].start.line;
+    const startCharacter = 0; // Start of the line
+    const endCharacter = editor.selection.active.character;
 
     this.searchResult = findBackward(
       this.searchString,
@@ -232,14 +237,15 @@ export class LeapWidget {
   }
 
   public findEntireView(): void {
-    this.currentSearchDirection = SearchDirection.ENTIRE;
+    this.currentSearchDirection = SearchDirection.ENTIRE_VIEW;
     const editor = window.activeTextEditor;
     if (!editor) {
       return;
     }
-
     const startLine = editor.visibleRanges[0].start.line;
     const endLine = editor.visibleRanges[0].end.line;
+    const startCharacter = 0; // Start of the line
+    const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
 
     this.searchResult = findEntireView(
       this.searchString,
