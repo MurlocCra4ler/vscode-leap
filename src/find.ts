@@ -1,16 +1,16 @@
 import { Position, TextLine, TextEditor, window, Range, TextEditorDecorationType } from "vscode";
-import { ExtensionSettings } from "./extension";
+import { ExtensionSettings, SearchDirection } from "./extension";
 
 let usedDecorationTypes: TextEditorDecorationType[] = [];
 
-export function find(searchString: string, matchCase: boolean, editor: TextEditor, settings: ExtensionSettings): Range[] {
+export function find(searchString: string, matchCase: boolean, direction: SearchDirection, editor: TextEditor, settings: ExtensionSettings): Range[] {
     const potentialMatches: Range[] = [];
     if (searchString.length === 0) {
         return potentialMatches;
     }
 
     searchString = matchCase ? searchString : searchString.toLowerCase();
-    const visibleLines = getVisibleLines(editor);
+    const visibleLines = getVisibleLines(editor, direction);
 
     const anchor = searchString.slice(0, 2);
     const anchorLength = Math.min(searchString.length, 2);
@@ -80,17 +80,28 @@ function numberToCharacter(value: number): string {
     return "eariotnslcudpmhgbfywkvxzjq".charAt(value);
 }
 
-function getVisibleLines(editor: TextEditor): TextLine[] {
+function getVisibleLines(editor: TextEditor, direction: SearchDirection): TextLine[] {
     let textLines = [];
     const ranges = editor.visibleRanges;
+    const cursorPosition = editor.selection.isEmpty ? editor.selection.active.line : -1;
 
     for (let range of ranges) {
         for (let lineNumber = range.start.line; lineNumber <= range.end.line; lineNumber++) {
+            if (checkSkipLine(direction, lineNumber, cursorPosition)) {
+                continue;
+            } 
             textLines.push(editor.document.lineAt(lineNumber));
         }
     }
 
     return textLines;
+}
+
+function checkSkipLine(direction: SearchDirection, lineNumber: number, cursorPosition: number): boolean {
+    if (direction === "both" || lineNumber === -1) {
+        return false;
+    }
+    return direction === "backwards" ? lineNumber > cursorPosition : lineNumber < cursorPosition;
 }
 
 function createDecorationType(label: string, showLabels: boolean): TextEditorDecorationType { 

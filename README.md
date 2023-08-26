@@ -14,7 +14,7 @@ The default key assignment to open the Leap widget is `Ctrl + Alt + F` and with 
 
 ### Keybindings
 
-Define new keybinds using the `"leap.find"` and `"leap.match-case"` commands.
+Define new keybinds using the `"leap.find"`, `"leap.find-forwards"`, `"leap.find-backwards"` and `"leap.match-case"` commands.
 
 ### Settings
 

@@ -28,6 +28,14 @@
         "title": "Leap Find: Open Widget"
       },
       {
+        "command": "leap.find-forwards",
+        "title": "Leap Find Forwards: Open Widget"
+      },
+      {
+        "command": "leap.find-backwards",
+        "title": "Leap Find Backwards: Open Widget"
+      },
+      {
         "command": "leap.match-case",
         "title": "Leap Find: Toggle Match Case"
       }
