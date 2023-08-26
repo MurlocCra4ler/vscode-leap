@@ -5,6 +5,16 @@ export type SearchDirection = "backwards" | "forwards" | "both";
 
 let widget: LeapWidget | undefined;
 
+function getWidgetInstance(
+  context: ExtensionContext,
+  settings: ExtensionSettings
+): LeapWidget {
+  if (!widget || !widget.isActive) {
+    widget = new LeapWidget(context, settings);
+  }
+  return widget;
+}
+
 export interface ExtensionSettings {
 	/* determines if <space><space> should only match the new Line symbol like in leap.nvim */
 	whiteSpacesOnlyMatchNewLine: boolean
@@ -18,7 +28,8 @@ export function activate(context: ExtensionContext) {
 				whiteSpacesOnlyMatchNewLine: getSetting<boolean>('whiteSpacesOnlyMatchNewLine', false)
 			};
 
-			widget = new LeapWidget(context, settings);
+			widget = getWidgetInstance(context, settings);
+			widget.setSearchDirection("both");
 			widget.show();
 		}),
 		commands.registerCommand('leap.find-forwards', async () => {
@@ -27,7 +38,8 @@ export function activate(context: ExtensionContext) {
 				whiteSpacesOnlyMatchNewLine: getSetting<boolean>('whiteSpacesOnlyMatchNewLine', false)
 			};
 
-			widget = new LeapWidget(context, settings, "forwards");
+			widget = getWidgetInstance(context, settings);
+			widget.setSearchDirection("forwards");
 			widget.show();
 		}),
 		commands.registerCommand('leap.find-backwards', async () => {
@@ -36,7 +48,8 @@ export function activate(context: ExtensionContext) {
 				whiteSpacesOnlyMatchNewLine: getSetting<boolean>('whiteSpacesOnlyMatchNewLine', false)
 			};
 
-			widget = new LeapWidget(context, settings, "backwards");
+			widget = getWidgetInstance(context, settings);
+			widget.setSearchDirection("backwards");
 			widget.show();
 		}),
 		commands.registerCommand('leap.match-case', async () => {

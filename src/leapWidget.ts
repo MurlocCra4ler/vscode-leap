@@ -15,17 +15,21 @@ export class LeapWidget {
     private readonly quickPick: QuickPick<QuickPickItem> = window.createQuickPick();
     private quickInputButtons: Map<QuickInputButton, () => void> = new Map();
 
-    constructor(private readonly context: ExtensionContext, private readonly settings: ExtensionSettings, direction: SearchDirection = "both") {
+    constructor(private readonly context: ExtensionContext, private readonly settings: ExtensionSettings) {
         this.quickPick.title = 'Leap Finder';
         this.quickPick.placeholder = 'Find';
 
         this.matchCase = !!this.context.globalState.get<boolean>(MATCH_CASE_KEY);
-        this.direction = direction;
+        this.direction = "both";
         this.createButtons();
 
         this.quickPick.onDidTriggerButton(this.onDidTriggerButton.bind(this));
         this.quickPick.onDidChangeValue(this.onChangeValue.bind(this));
         this.quickPick.onDidHide(this.hide.bind(this));
+    }
+
+    public setSearchDirection(direction: SearchDirection) {
+        this.direction = direction;
     }
 
     public show(): void {
