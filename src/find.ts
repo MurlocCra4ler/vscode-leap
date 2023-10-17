@@ -10,35 +10,6 @@ import { ExtensionSettings } from "./extension";
 
 let usedDecorationTypes: TextEditorDecorationType[] = [];
 
-const LABELS = [
-  "s",
-  "f",
-  "n",
-  "j",
-  "k",
-  "l",
-  "h",
-  "o",
-  "d",
-  "w",
-  "e",
-  "i",
-  "m",
-  "b",
-  "u",
-  "y",
-  "v",
-  "r",
-  "g",
-  "t",
-  "a",
-  "q",
-  "p",
-  "c",
-  "x",
-  "z",
-];
-
 export function findForward(
   searchString: string,
   matchCase: boolean,
@@ -185,7 +156,7 @@ export function findFromRange(
   const searchStringTail = searchString.slice(2).toLocaleLowerCase();
   const searchResult: Range[] = [];
   for (let i = 0; i < potentialMatches.length; i++) {
-    if (createLabels(i, searchStringTail.length) === searchStringTail) {
+    if (createLabels(i, searchStringTail.length, settings.labels) === searchStringTail) {
       searchResult.push(potentialMatches[i]);
     }
   }
@@ -196,6 +167,7 @@ export function findFromRange(
 export function hightlight(
   searchResult: Range[],
   editor: TextEditor,
+  labels: string[],
   showLabels: boolean
 ): void {
   for (let i = 0; i < usedDecorationTypes.length; i++) {
@@ -204,7 +176,7 @@ export function hightlight(
 
   usedDecorationTypes = [];
   for (let i = 0; i < searchResult.length; i++) {
-    const decorationType = createDecorationType(createLabels(i, 1), showLabels);
+    const decorationType = createDecorationType(createLabels(i, 1, labels), showLabels);
 
     const labelRange = new Range(
       searchResult[i].end, // start from the end of the match
@@ -216,18 +188,18 @@ export function hightlight(
   }
 }
 
-function createLabels(value: number, length: number): string {
+function createLabels(value: number, length: number, labels: string[]): string {
   let truffle = "";
   for (let i = 0; i < length; i++) {
-    truffle += numberToCharacter(value % LABELS.length);
-    value = Math.floor(value / LABELS.length);
+    truffle += numberToCharacter(value % labels.length, labels);
+    value = Math.floor(value / labels.length);
   }
   return truffle;
 }
 
-function numberToCharacter(value: number): string {
-  if (value >= 0 && value < LABELS.length) {
-    return LABELS[value];
+function numberToCharacter(value: number, labels: string[]): string {
+  if (value >= 0 && value < labels.length) {
+    return labels[value];
   }
   return "";
 }

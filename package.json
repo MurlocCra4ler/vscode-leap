@@ -64,6 +64,14 @@
             "type": "boolean",
             "default": false,
             "description": "Determines if <space><space> should only match the new Line symbol like in leap.nvim"
+          },
+          "leap.customLabels": {
+            "type": ["array", "null"],
+            "default": null,
+            "description": "Use a custom set of jump labels",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }

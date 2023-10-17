@@ -154,7 +154,7 @@ export class LeapWidget {
     }
 
     const showLabels = this.searchString.length >= 2;
-    hightlight(this.searchResult, editor, showLabels);
+    hightlight(this.searchResult, editor, this.settings.labels, showLabels);
 
     if (this.searchResult.length === 1) {
       editor.selections = [
@@ -172,7 +172,7 @@ export class LeapWidget {
 
     const editor = window.activeTextEditor;
     if (editor) {
-      hightlight([], editor, false);
+      hightlight([], editor, [], false);
     }
   }
 
@@ -264,7 +264,7 @@ export class LeapWidget {
       return;
     }
     const showLabels = this.searchString.length >= 2;
-    hightlight(this.searchResult, editor, showLabels);
+    hightlight(this.searchResult, editor, this.settings.labels, showLabels);
 
     if (this.searchResult.length === 1) {
       editor.selections = [
