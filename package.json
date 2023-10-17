@@ -11,7 +11,12 @@
   "categories": [
     "Other"
   ],
-  "keywords": [ "leap", "leap.nvim", "jump", "jumpy" ],
+  "keywords": [
+    "leap",
+    "leap.nvim",
+    "jump",
+    "jumpy"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/MurlocCra4ler/vscode-leap.git"
@@ -28,11 +33,19 @@
         "title": "Leap Find: Open Widget"
       },
       {
+        "command": "leap.findForward",
+        "title": "Leap Find: Find Forward"
+      },
+      {
+        "command": "leap.findBackward",
+        "title": "Leap Find: Find Backward"
+      },
+      {
         "command": "leap.match-case",
         "title": "Leap Find: Toggle Match Case"
       }
     ],
-    "keybindings":[
+    "keybindings": [
       {
         "command": "leap.find",
         "key": "ctrl+alt+f"
@@ -42,7 +55,7 @@
         "key": "alt+c"
       }
     ],
-    "configuration":[
+    "configuration": [
       {
         "title": "Leap",
         "properties": {

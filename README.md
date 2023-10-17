@@ -29,8 +29,12 @@ Example using the [Vim extension](https://marketplace.visualstudio.com/items?ite
 "vim.normalModeKeyBindingsNonRecursive": [
     {
         "before": ["s"],
-        "commands": ["leap.find"]
-    }
+        "commands": ["leap.findForward"]
+    },
+    {
+        "before": ["S"],
+        "commands": ["leap.findBackward"]
+    },
 ]
 ```
 
