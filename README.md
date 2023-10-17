@@ -44,6 +44,10 @@ None, but feel free to report any bugs you may find :)
 
 ## Release Notes
 
+### 0.0.4
+
+Added options for forward/backwards search and custom labels. The extension now runs in remote work spaces.
+
 ### 0.0.3
 
 The behaviour when searching for whitespaces has been improved.

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2023-10-17
+
+### Added
+
+- Forward/Backwards search is now possible.
+- New Option for custom labels.
+
+### Fixed
+
+- Extension now runs in remote work spaces.
+
 ## [0.0.3] - 2023-05-01
 
 ### Changed
