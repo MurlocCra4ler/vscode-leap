@@ -200,7 +200,8 @@ export class LeapWidget {
     }
     const startLine = editor.selection.active.line;
     const startCharacter = editor.selection.active.character;
-    const endLine = editor.visibleRanges[0].end.line;
+    const endLine =
+      editor.visibleRanges[editor.visibleRanges.length - 1].end.line;
     const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
 
     this.searchResult = findForward(
@@ -243,7 +244,8 @@ export class LeapWidget {
       return;
     }
     const startLine = editor.visibleRanges[0].start.line;
-    const endLine = editor.visibleRanges[0].end.line;
+    const endLine =
+      editor.visibleRanges[editor.visibleRanges.length - 1].end.line;
     const startCharacter = 0; // Start of the line
     const endCharacter = editor.document.lineAt(endLine).text.length; // End of the line
 
